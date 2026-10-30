@@ -235,10 +235,10 @@ if __name__ == '__main__':
 
             with gr.Row():
                 clear_btn = gr.ClearButton(value='Clear', components=[song_input, rvc_model, keep_files, local_file])
-                generate_btn = gr.Button("Generate", variant='primary')
+            generate_btn = gr.Button("Generate", variant='primary')
             with gr.Row():
-                ai_cover = gr.Audio(label='AI Cover (Vocal Only Inference)', show_share_button=False)
-                ai_backing = gr.Audio(label='AI Cover (Vocal Backing Inference)', show_share_button=False)
+                ai_cover = gr.Audio(label='AI Cover (Vocal Only Inference)')
+            ai_backing = gr.Audio(label='AI Cover (Vocal Backing Inference)')
 
             ref_btn.click(update_models_list, None, outputs=rvc_model)
             is_webui = gr.Number(value=1, visible=False)
