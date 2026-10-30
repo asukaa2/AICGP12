@@ -180,20 +180,16 @@ def preprocess_song(song_input, mdx_model_params, song_id, is_webui, input_type,
     orig_song_path = convert_to_stereo(orig_song_path)
 
     display_progress('[~] Separating Vocals from Instrumental...', 0.1, is_webui, progress)
-    # run_roformer shells out to the `audio-separator` CLI, which needs Python>=3.9 and isn't
-    # installable on Python 3.8 (the only interpreter with a prebuilt fairseq 0.12.2 wheel). When
-    # the CLI is present we keep the higher-quality roformer split; otherwise we fall back to the
-    # bundled onnxruntime MDX-Net separator (UVR-MDX-NET-Voc_FT.onnx) so the pipeline still runs.
     if shutil.which('audio-separator'):
         vocals_path, instrumentals_path = run_roformer(mdx_model_params, song_output_dir, 'model_bs_roformer_ep_317_sdr_12.9755.ckpt', orig_song_path, denoise=True, keep_orig=keep_orig)
     else:
-        vocals_path, instrumentals_path = run_mdx(mdx_model_params, song_output_dir, os.path.join(mdxnet_models_dir, 'UVR-MDX-NET-Voc_FT.onnx'), orig_song_path, denoise=True, keep_orig=keep_orig)
+        vocals_path, instrumentals_path = run_mdx(mdx_model_params, song_output_dir, 'UVR-MDX-NET-Voc_FT.onnx', orig_song_path, denoise=True, keep_orig=keep_orig)
 
     display_progress('[~] Separating Main Vocals from Backup Vocals...', 0.2, is_webui, progress)
-    backup_vocals_path, main_vocals_path = run_mdx(mdx_model_params, song_output_dir, os.path.join(mdxnet_models_dir, 'UVR_MDXNET_KARA_2.onnx'), vocals_path, suffix='Backup', invert_suffix='Main', denoise=True)
+    backup_vocals_path, main_vocals_path = run_mdx(mdx_model_params, song_output_dir, 'UVR_MDXNET_KARA_2.onnx', vocals_path, suffix='Backup', invert_suffix='Main', denoise=True)
 
     display_progress('[~] Applying DeReverb to Vocals...', 0.3, is_webui, progress)
-    _, main_vocals_dereverb_path = run_mdx(mdx_model_params, song_output_dir, os.path.join(mdxnet_models_dir, 'Reverb_HQ_By_FoxJoy.onnx'), main_vocals_path, invert_suffix='DeReverb', exclude_main=True, denoise=True)
+    _, main_vocals_dereverb_path = run_mdx(mdx_model_params, song_output_dir,  'Reverb_HQ_By_FoxJoy.onnx', main_vocals_path, invert_suffix='DeReverb', exclude_main=True, denoise=True)
 
     return orig_song_path, vocals_path, instrumentals_path, main_vocals_path, backup_vocals_path, main_vocals_dereverb_path
 
