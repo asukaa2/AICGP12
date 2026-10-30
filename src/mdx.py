@@ -20,8 +20,8 @@ def run_mdx(model_params, output_dir, model_name, filename, exclude_main=False, 
 
     if not exclude_main:
         main_filepath = os.path.join(output_dir, vocals_file)
-        if os.path.exists(os.path.join(output_dir, f"{base_name}_(Vocals)_{model_name.replace('.pth', '')}.wav")):
-            os.rename(os.path.join(output_dir, f"{base_name}_(Vocals)_{model_name.replace('.pth', '')}.wav"), main_filepath)
+        if os.path.exists(os.path.join(output_dir, f"{base_name}_(Vocals)_{model_name.replace('.onnx', '')}.wav")):
+            os.rename(os.path.join(output_dir, f"{base_name}_(Vocals)_{model_name.replace('.onnx', '')}.wav"), main_filepath)
 
     if not exclude_inversion:
         invert_filepath = os.path.join(output_dir, instrumental_file)
