@@ -1,27 +1,13 @@
 deemix
 omegaconf>=2.0.6
-faiss-cpu>=1.7.3
+faiss-cpu>=1.8.0
 ffmpeg-python>=0.2.0
 gradio>=6.31.0
-# Gradio 6.x's routes.py references `starlette.status.HTTP_422_UNPROCESSABLE_CONTENT`,
-# which was only added to starlette in 0.48.0 (Sep 2025) as the replacement for
-# the deprecated `HTTP_422_UNPROCESSABLE_ENTITY`. If an older starlette is
-# resolved (e.g. pulled in transitively by an older fastapi), the WebUI's
-# `/queue/join` endpoint crashes at request time with:
-#   AttributeError: module 'starlette.status' has no attribute
-#   'HTTP_422_UNPROCESSABLE_CONTENT'
-# Force a starlette that has the constant.
 starlette>=0.48.0
 lib==4.0.0
 librosa==0.10
-# NumPy 2.x changed the C-API ABI. onnxruntime (and a few other wheels
-# in this stack) were compiled against NumPy 1.x, so importing them under
-# NumPy 2.x raises `AttributeError: _ARRAY_API not found` from
-# onnxruntime_pybind11_state. Pin to <2 until every binary wheel in the
-# stack ships a NumPy-2.x build. See requirements_py38.txt for the same
-# pin (==1.23.5) on Python 3.8.
-numpy<2
-onnxruntime_gpu
+numpy>=2
+onnxruntime_gpu>=1.19.0
 praat-parselmouth>=0.4.2
 pedalboard
 pydub==0.25.1
