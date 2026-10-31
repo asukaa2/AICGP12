@@ -34,7 +34,7 @@ def load_public_models():
             models_table.append(model)
 
     tags = list(public_models['tags'].keys())
-    return gr.DataFrame.update(value=models_table), gr.CheckboxGroup.update(choices=tags)
+    return gr.update(value=models_table), gr.update(choices=tags)
 
 
 def extract_zip(extraction_folder, zip_name):
@@ -141,11 +141,11 @@ def filter_models(tags, query):
             if query.lower() in model_attributes:
                 models_table.append([model['name'], model['description'], model['credit'], model['url'], model['tags']])
 
-    return gr.DataFrame.update(value=models_table)
+    return gr.update(value=models_table)
 
 
 def pub_dl_autofill(pub_models, event: gr.SelectData):
-    return gr.Text.update(value=pub_models.loc[event.index[0], 'URL']), gr.Text.update(value=pub_models.loc[event.index[0], 'Model Name'])
+    return gr.update(value=pub_models.loc[event.index[0], 'URL']), gr.update(value=pub_models.loc[event.index[0], 'Model Name'])
 
 
 def swap_visibility():
