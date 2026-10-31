@@ -3,6 +3,15 @@ omegaconf>=2.0.6
 faiss-cpu>=1.7.3
 ffmpeg-python>=0.2.0
 gradio>=6.31.0
+# Gradio 6.x's routes.py references `starlette.status.HTTP_422_UNPROCESSABLE_CONTENT`,
+# which was only added to starlette in 0.48.0 (Sep 2025) as the replacement for
+# the deprecated `HTTP_422_UNPROCESSABLE_ENTITY`. If an older starlette is
+# resolved (e.g. pulled in transitively by an older fastapi), the WebUI's
+# `/queue/join` endpoint crashes at request time with:
+#   AttributeError: module 'starlette.status' has no attribute
+#   'HTTP_422_UNPROCESSABLE_CONTENT'
+# Force a starlette that has the constant.
+starlette>=0.48.0
 lib==4.0.0
 librosa==0.10
 # NumPy 2.x changed the C-API ABI. onnxruntime (and a few other wheels
