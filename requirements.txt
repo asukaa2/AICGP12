@@ -5,7 +5,13 @@ ffmpeg-python>=0.2.0
 gradio>=6.31.0
 lib==4.0.0
 librosa==0.10
-numpy
+# NumPy 2.x changed the C-API ABI. onnxruntime (and a few other wheels
+# in this stack) were compiled against NumPy 1.x, so importing them under
+# NumPy 2.x raises `AttributeError: _ARRAY_API not found` from
+# onnxruntime_pybind11_state. Pin to <2 until every binary wheel in the
+# stack ships a NumPy-2.x build. See requirements_py38.txt for the same
+# pin (==1.23.5) on Python 3.8.
+numpy<2
 onnxruntime_gpu
 praat-parselmouth>=0.4.2
 pedalboard
