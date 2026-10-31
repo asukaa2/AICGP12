@@ -96,9 +96,10 @@ class Config:
 
 
 def load_hubert(device, is_half, model_path):
-    models, fairseq.load_model(model_path).to(self.device).eval()
-    hubert = models[0]
-    hubert = hubert.to(device)
+    # The bundled src/fairseq.py exposes load_model(filename), which returns a
+    # single HubertModel instance (NOT an ensemble tuple), so we bind it
+    # directly instead of unpacking like the upstream checkpoint_utils API.
+    hubert = fairseq.load_model(model_path).to(device).eval()
 
     if is_half:
         hubert = hubert.half()
